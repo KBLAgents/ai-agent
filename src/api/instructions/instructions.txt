@@ -8,14 +8,16 @@ Instruction
 -----
 Analyze {company} company, return the following:
    - the company's official name
+   - stock ticker symbol
    - company description
-   - analysis of competitors and unique value
+   - detailed analysis of competitors and unique value
    - and some these keyfacts - Market Cap, EPS Growth(FWD), P/E(FWD), Industry, Dividend Yield, Dividend Frequency, Annual Payout
    - Return the output in a json format with the schema below without any explanation or additional text:
 
 """
 {
    "name": str,
+   "ticker": str
    "description": str,
    "competitors_and_value_analysis": str,
    "keyfacts": {
