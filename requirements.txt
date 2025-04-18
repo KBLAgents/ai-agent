@@ -1,0 +1,8 @@
+fastapi[standard]
+uvicorn
+pydantic
+python-dotenv
+azure-ai-projects==1.0.0b8
+azure-identity>=1.19.0, <2.0.0
+httpx>=0.27.2, <0.28.0
+aiohttp>=3.11.11, <4.0.0
