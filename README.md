@@ -50,3 +50,13 @@ This script streamlines the deployment and configuration process, ensuring all n
 ![azure-resources](./docs/assets/azure-resources.png)
 
 
+# Run locally
+
+```bash
+cd src/api
+
+# Copy and rename sample.env as .env and populate the values
+cp sample.env .env
+
+fastapi dev main.py
+```

@@ -9,7 +9,8 @@
     "features": {
         "ghcr.io/devcontainers/features/azure-cli:1": {
             "extensions": "ml"
-        }
+        },
+        "azure-cli": "latest"
     },
     "customizations": {
         "vscode": {
@@ -20,5 +21,6 @@
                 "ms-azuretools.vscode-bicep"
             ]
         }
-    }
+    },
+    "postCreateCommand": "pip install --user -r requirements.txt"
 }
