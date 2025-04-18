@@ -6,6 +6,9 @@ from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 from fastapi import FastAPI
 
+from contracts.analytics_contract import AnalyticsResponse
+from utilities.utitlities import Utilities
+
 load_dotenv()
 app = FastAPI()
 
@@ -13,9 +16,12 @@ AGENT_NAME = "Analytic Agent"
 API_DEPLOYMENT_NAME = os.getenv("MODEL_DEPLOYMENT_NAME")
 PROJECT_CONNECTION_STRING = os.getenv("PROJECT_CONNECTION_STRING")
 BING_CONNECTION_NAME = os.getenv("BING_CONNECTION_NAME")
-
+INSTRUCTION_FILE = "instructions/instructions.txt"
 TEMPERATURE = 0.1
 
+utilities = Utilities()
+
+INSTRUCTIONS = utilities.load_instructions(INSTRUCTION_FILE)
 project_client = AIProjectClient.from_connection_string(
     credential=DefaultAzureCredential(),
     conn_str=PROJECT_CONNECTION_STRING,
@@ -23,11 +29,10 @@ project_client = AIProjectClient.from_connection_string(
 
 
 async def initialize_agent() -> tuple[Agent, AgentThread]:
-
     agent = await project_client.agents.create_agent(
         model=API_DEPLOYMENT_NAME,
         name=AGENT_NAME,
-        instructions="You are helpful agent",
+        instructions="You are a helpful agent that can analyze the company and provide insights.",
         temperature=TEMPERATURE,
     )
     print(f"Created agent, agent ID: {agent.id}")
@@ -40,17 +45,20 @@ async def initialize_agent() -> tuple[Agent, AgentThread]:
 
 @app.get("/analyze")
 async def analyze(query: str):
+
     agent, thread = await initialize_agent()
+
     if not agent or not thread:
-        print(f"Initialization failed. Agent ID: {agent.id}, Thread ID: {thread.id}")
+        print(
+            f"Initialization failed. Agent ID: {agent.id}, Thread ID: {thread.id}")
         print("Exiting...")
         return
-    
-        # Create a message
+    instructions = INSTRUCTIONS.replace("{company}", query)
+    # Create a message
     message = await project_client.agents.create_message(
         thread_id=thread.id,
         role="user",
-        content=query,
+        content=instructions,
     )
     print(f"Created message, message ID: {message.id}")
 
@@ -64,5 +72,6 @@ async def analyze(query: str):
 
     # Get messages from the thread
     messages = await project_client.agents.list_messages(thread_id=thread.id)
-    print(f"Messages: {messages}")
-    return(messages.data[0].content)
+
+    print(f"Messages: {messages.data[0].content[0].text.value}")
+    return ({messages.data[0].content[0].text.value})
