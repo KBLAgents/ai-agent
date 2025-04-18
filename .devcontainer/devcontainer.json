@@ -7,10 +7,11 @@
         "context": ".."
     },
     "features": {
-        "ghcr.io/devcontainers/features/azure-cli:1": {
-            "extensions": "ml"
-        },
-        "azure-cli": "latest"
+        "ghcr.io/devcontainers/features/azure-cli:latest": {
+            "version": "latest",
+            "extensions": "ml",
+            "installBicep": true
+        }
     },
     "customizations": {
         "vscode": {
