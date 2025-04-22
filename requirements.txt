@@ -1,8 +1,10 @@
-fastapi[standard]
-uvicorn
-pydantic
-python-dotenv
+aiosqlite>=0.20.0, <1.0.0
 azure-ai-projects==1.0.0b8
 azure-identity>=1.19.0, <2.0.0
-httpx>=0.27.2, <0.28.0
 aiohttp>=3.11.11, <4.0.0
+fastapi[standard]
+httpx>=0.27.2, <0.28.0
+pandas>=2.2.3, <3.0.0
+pydantic
+python-dotenv
+uvicorn
