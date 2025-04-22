@@ -26,7 +26,6 @@ Analyze {organization} organization, return the following:
    - stock ticker symbol
    - organization description
    - detailed analysis of competitors and unique value
-   - and some these keyfacts - Market Cap, EPS Growth(FWD), P/E(FWD), Industry, Dividend Yield, Dividend Frequency, Annual Payout
    - Return the output in a json format with the schema below without any explanation or additional text:
 
 """
@@ -34,15 +33,11 @@ Analyze {organization} organization, return the following:
    "name": str,
    "ticker": str
    "description": str,
-   "competitors_and_value_analysis": str,
-   "keyfacts": {
-      "market_cap": str,
-      "eps": str,
-      "pe": str,
-      "industry": str,
-      "dividend_yield": str,
-      "dividend_frequency": str,
-      "annual_payout": str
-   }
+   "industry": str,
+   "website": str,
+   "headquarters": str,
+   "employees": str,
+   "ceo": str,
+   "competitors_and_value_analysis": str
 }
 """

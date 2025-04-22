@@ -67,10 +67,8 @@ class OrganizationData:
             ]
         )
         industries = await self._get_industries()
-        market_caps = await self._get_market_caps()
 
         database_info += f"\nIndustries: {', '.join(industries)}"
-        database_info += f"\nMarket Caps: {', '.join(market_caps)}"
         database_info += "\n\n"
 
         return database_info
