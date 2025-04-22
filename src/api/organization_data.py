@@ -52,12 +52,6 @@ class OrganizationData:
             result = await industries.fetchall()
         return [industry[0] for industry in result]
 
-    async def _get_market_caps(self: "OrganizationData") -> list:
-        """Return a list of unique market_caps in the database."""
-        async with self.conn.execute("SELECT DISTINCT market_cap FROM organizations ORDER BY market_cap;") as market_caps:
-            result = await market_caps.fetchall()
-        return [str(market_cap[0]) for market_cap in result]
-
     async def get_database_info(self: "OrganizationData") -> str:
         """Return a string containing the database schema information and common query fields."""
         table_dicts = []
