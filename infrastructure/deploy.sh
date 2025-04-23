@@ -38,6 +38,9 @@ done
 
 error_exit() {
   echo "Error on line $1: $2" >&2
+  # Clean up output.json if it exists
+  echo "Cleaning up output.json..."
+  [ -f output.json ] && rm -f output.json
   exit 1
 }
 trap 'error_exit $LINENO "$BASH_COMMAND"' ERR
