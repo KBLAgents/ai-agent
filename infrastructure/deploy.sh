@@ -2,16 +2,19 @@
 
 echo "Deploying the Azure resources..."
 
-# Define resource group parameters
-RG_NAME="rg-agent-analyst"
-RG_LOCATION="westus"
-MODEL_NAME="gpt-4o"
-AI_HUB_NAME="agent-wksp"
-AI_PROJECT_NAME="agent-analyst"
-AI_PROJECT_FRIENDLY_NAME="Agent-Service-analyst"
-STORAGE_NAME="agentservicestorage"
-AI_SERVICES_NAME="agent-analyst"
-MODEL_CAPACITY=200
+# Load environment variables from .env file
+# set -a
+source ".env"
+# set +a
+
+# Verify required variables are loaded
+required_vars=(RG_NAME RG_LOCATION MODEL_NAME AI_HUB_NAME AI_PROJECT_NAME AI_PROJECT_FRIENDLY_NAME STORAGE_NAME AI_SERVICES_NAME MODEL_CAPACITY)
+for var in "${required_vars[@]}"; do
+  if [ -z "${!var}" ]; then
+    echo "Error: $var is not set in .env file."
+    exit 1
+  fi
+done
 
 # Create the resource group
 az group create --name "$RG_NAME" --location "$RG_LOCATION"
@@ -53,6 +56,7 @@ if [ -f output.json ]; then
     # Write to the .env file
     {
       echo "PROJECT_CONNECTION_STRING=$PROJECT_CONNECTION_STRING"
+      echo "BING_CONNECTION_NAME=\"groundingwithbingsearch\""
       echo "MODEL_DEPLOYMENT_NAME=\"$MODEL_NAME\""
     } > "$ENV_FILE_PATH"
 
@@ -64,6 +68,30 @@ if [ -f output.json ]; then
 else
   echo "Error: output.json not found."
 fi
+
+# Register the Bing Search resource provider
+echo "Attempting to register the Bing Search provider"
+
+az provider register --namespace 'Microsoft.Bing'
+
+# Check if the command succeeded based on its exit status
+if [ $? -ne 0 ]; then
+    echo "Bing Search registration FAILED. The attempt to register the Bing Search resource was unsuccessful, which means you cannot complete the Grounding with Bing Search lab."
+    exit 1
+fi
+
+# Wait for a few seconds to allow Azure time to process the registration
+sleep 10
+
+# Check if the provider is registered successfully
+provider_state=$(az provider show --namespace 'Microsoft.Bing' --query "registrationState" -o tsv)
+
+if [ "$provider_state" != "Registered" ]; then
+    echo "Bing Search registration FAILED. The attempt to register the Bing Search resource was unsuccessful, which means you cannot complete the Grounding with Bing Search lab."
+    exit 1
+fi
+
+echo "Bing Search registration succeeded."
 
 # Set Variables
 subId=$(az account show --query id --output tsv)
