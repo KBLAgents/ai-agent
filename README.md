@@ -12,9 +12,6 @@ The purpose of the AI Agent is to summarize and analyze organization data given 
 ## Infrastructure
 
 ```bash
-# login to Azure
-az login
-
 # navigate to the infrastructure directory
 cd infrastructure
 
