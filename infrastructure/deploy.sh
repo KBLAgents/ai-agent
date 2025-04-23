@@ -3,15 +3,15 @@
 echo "Deploying the Azure resources..."
 
 # Define resource group parameters
-RG_NAME="rg-agent-vanalyst"
-RG_LOCATION="eastus"
+RG_NAME="rg-agent-analyst"
+RG_LOCATION="westus"
 MODEL_NAME="gpt-4o"
 AI_HUB_NAME="agent-wksp"
 AI_PROJECT_NAME="agent-analyst"
 AI_PROJECT_FRIENDLY_NAME="Agent-Service-analyst"
 STORAGE_NAME="agentservicestorage"
 AI_SERVICES_NAME="agent-analyst"
-MODEL_CAPACITY=100
+MODEL_CAPACITY=200
 
 # Create the resource group
 az group create --name "$RG_NAME" --location "$RG_LOCATION"
