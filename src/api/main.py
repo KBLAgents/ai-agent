@@ -5,6 +5,7 @@ from azure.ai.projects.models import (
     AgentThread,
     AsyncFunctionTool,
     AsyncToolSet,
+    BingGroundingTool
 )
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
@@ -19,6 +20,7 @@ app = FastAPI()
 AGENT_NAME = "Analytic Agent"
 API_DEPLOYMENT_NAME = os.getenv("MODEL_DEPLOYMENT_NAME")
 PROJECT_CONNECTION_STRING = os.getenv("PROJECT_CONNECTION_STRING")
+BING_CONNECTION_NAME = os.getenv("BING_CONNECTION_NAME")
 INSTRUCTION_FILE = "instructions/function_calling.txt"
 TEMPERATURE = 0.1
 
@@ -59,7 +61,7 @@ async def analyze(query: str):
 
         # Prepare instructions
         instructions = prepare_instructions(query, database_schema)
-
+        print(instructions)
         # Create a message
         message = await project_client.agents.create_message(
             thread_id=thread.id,
@@ -70,6 +72,13 @@ async def analyze(query: str):
         # Run the agent
         toolset = AsyncToolSet()
         toolset.add(AsyncFunctionTool({organization_data.async_fetch_organization_data_using_sqlite_query}))
+
+        # Add the Bing grounding tool
+        bing_connection = await project_client.connections.get(connection_name=BING_CONNECTION_NAME)
+        bing_grounding = BingGroundingTool(connection_id=bing_connection.id)
+        print(f"Using Bing connection: {bing_connection.id}")
+        toolset.add(bing_grounding)
+        
         run = await project_client.agents.create_and_process_run(
             thread_id=thread.id, agent_id=agent.id, toolset=toolset
         )

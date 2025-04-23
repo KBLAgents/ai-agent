@@ -19,12 +19,22 @@ Tools
    - Always format the response as a markdown table by default for all languages.
    - If asked to download data, then default to .csv.
 
+2. Real-time Insights
+   - For company's current stock price, short description of the company, related news, market cap, dividend fequency, eps, revenue, next earnings date, detailed analysis of competitors and unique value of the company, use the Grounding with Bing Search tool search the internet for that data.
+
 Instruction
 -----
 Analyze {organization} organization, return the following:
    - the organization's official name
    - stock ticker symbol
    - organization description
+   - current stock price
+   - market cap
+   - Earnings per Share
+   - dividend frequency
+   - revenue,
+   - next earnings date
+   - top 5 related news
    - detailed analysis of competitors and unique value
    - Return the output in a json format with the schema below without any explanation or additional text:
 
@@ -38,6 +48,13 @@ Analyze {organization} organization, return the following:
    "headquarters": str,
    "employees": str,
    "ceo": str,
+   "stock_price": str,
+   "market_cap": str,
+   "eps": str,
+   "revenue": str,
+   "dividend_frequency": str,
+   "next_earnings_date": str,
+   "related_news":[{"title": str, "summary": str, "source": str}],
    "competitors_and_value_analysis": str
 }
 """

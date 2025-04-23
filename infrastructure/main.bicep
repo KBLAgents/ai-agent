@@ -40,10 +40,10 @@ param modelVersion string = '2024-08-06'
 param modelSkuName string = 'GlobalStandard'
 
 @description('Model deployment capacity')
-param modelCapacity int = 100
+param modelCapacity int = 200
 
 @description('Model deployment location. If you want to deploy an Azure AI resource/model in different location than the rest of the resources created.')
-param modelLocation string = 'eastus'
+param modelLocation string = 'westus'
 
 // Variables
 var name = toLower('${aiHubName}')
