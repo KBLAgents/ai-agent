@@ -58,7 +58,7 @@ The provisioned resources include:
 
 1. Confirm the `src/api/.env` has been created succesfully and the `PROJECT_CONNECTION_STRING` is populated referencing the newly created resources. 
 
-1. Create the sqlite database with organization data based on `src/api/database/organizaton_entities.sql` by running
+1. Create the sqlite database with organization data based on `src/api/database/organizaton_entities.sql` by running the `Generate database` task using the Command Palette (Ctrl+Shift+P) or by running the following commands in the terminal: 
 
    ```bash
    # navigate to the database directory
@@ -71,14 +71,14 @@ The provisioned resources include:
    sqlite3 /workspaces/ai-agent/src/api/database/organizations.db "SELECT COUNT(*) FROM organizations"
    ```
 
-1. Run the Analyst Agent API
+1. Run the Analyst Agent API by running the `Run API` task using the Command Palette (Ctrl+Shift+P) or by running the following commands in the terminal:
 
    ```bash
    # navigate back to the api directory
    cd ..
 
    # run the API 
-   fastapi dev main.py
+   uvicorn main:app --reload
    ```
 
    The API will load in which will load on http://127.0.0.1:8000/docs.
