@@ -1,0 +1,33 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate database",
+            "type": "shell",
+            "command": "python generate_sql.py",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+              "cwd": "${workspaceFolder}/src/api/database"
+            }
+        },
+        {
+            "label": "Run API",
+            "type": "shell",
+            "command": "uvicorn main:app --reload",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+              "cwd": "${workspaceFolder}/src/api"
+            }
+        },
+    ]
+}
