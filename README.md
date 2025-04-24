@@ -18,6 +18,10 @@ az login
 # navigate to the infrastructure directory
 cd infrastructure
 
+# copy and rename sample.env to .env
+cp sample.env .env
+# you can update these variable names if you want.
+
 # run the deployment script
 . ./deploy.sh
 ```
