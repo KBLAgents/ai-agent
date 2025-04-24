@@ -1,7 +1,7 @@
 import csv
 
-input_file = '/workspaces/ai-agent/src/api/database/fortune-500-companies'
-output_file = '/workspaces/ai-agent/src/api/database/fortune500_inserts.sql'
+input_file = '/workspaces/ai-agent/docs/spike/sql-statement-generator/fortune-500-companies'
+output_file = '/workspaces/ai-agent/docs/spike/sql-statement-generator/fortune500_inserts.sql'
 
 def clean_currency(value):
     return value.replace('$', '').replace(',', '').strip()

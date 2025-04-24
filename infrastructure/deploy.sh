@@ -56,7 +56,6 @@ if [ -f output.json ]; then
     # Write to the .env file
     {
       echo "PROJECT_CONNECTION_STRING=$PROJECT_CONNECTION_STRING"
-      echo "BING_CONNECTION_NAME=\"groundingwithbingsearch\""
       echo "MODEL_DEPLOYMENT_NAME=\"$MODEL_NAME\""
     } > "$ENV_FILE_PATH"
 
@@ -68,30 +67,6 @@ if [ -f output.json ]; then
 else
   echo "Error: output.json not found."
 fi
-
-# Register the Bing Search resource provider
-echo "Attempting to register the Bing Search provider"
-
-az provider register --namespace 'Microsoft.Bing'
-
-# Check if the command succeeded based on its exit status
-if [ $? -ne 0 ]; then
-    echo "Bing Search registration FAILED. The attempt to register the Bing Search resource was unsuccessful, which means you cannot complete the Grounding with Bing Search lab."
-    exit 1
-fi
-
-# Wait for a few seconds to allow Azure time to process the registration
-sleep 10
-
-# Check if the provider is registered successfully
-provider_state=$(az provider show --namespace 'Microsoft.Bing' --query "registrationState" -o tsv)
-
-if [ "$provider_state" != "Registered" ]; then
-    echo "Bing Search registration FAILED. The attempt to register the Bing Search resource was unsuccessful, which means you cannot complete the Grounding with Bing Search lab."
-    exit 1
-fi
-
-echo "Bing Search registration succeeded."
 
 # Set Variables
 subId=$(az account show --query id --output tsv)
