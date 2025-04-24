@@ -1,12 +1,10 @@
 import os
-import json
 from azure.ai.projects.aio import AIProjectClient
 from azure.ai.projects.models import (
     Agent,
     AgentThread,
     AsyncFunctionTool,
     AsyncToolSet,
-    BingGroundingTool
 )
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
@@ -74,9 +72,9 @@ async def analyze(query: str):
 
         # Prepare instructions
         instructions = prepare_instructions(query, database_schema)
-        print(instructions)
+
         # Create a message
-        message = await project_client.agents.create_message(
+        await project_client.agents.create_message(
             thread_id=thread.id,
             role="user",
             content=instructions,
@@ -86,12 +84,6 @@ async def analyze(query: str):
         toolset = AsyncToolSet()
         toolset.add(AsyncFunctionTool(
             {organization_data.async_fetch_organization_data_using_sqlite_query}))
-
-        # Add the Bing grounding tool
-        # bing_connection = await project_client.connections.get(connection_name=BING_CONNECTION_NAME)
-        # bing_grounding = BingGroundingTool(connection_id=bing_connection.id)
-        # print(f"Using Bing connection: {bing_connection.id}")
-        # toolset.add(bing_grounding)
 
         run = await project_client.agents.create_and_process_run(
             thread_id=thread.id, agent_id=agent.id, toolset=toolset, response_format={
