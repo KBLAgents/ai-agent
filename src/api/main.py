@@ -1,4 +1,5 @@
 import os
+import json
 from azure.ai.projects.aio import AIProjectClient
 from azure.ai.projects.models import (
     Agent,
@@ -14,16 +15,17 @@ from pydantic import BaseModel
 from utilities.utilities import Utilities
 from organization_data import OrganizationData
 
+
 class CompanyAnalytics(BaseModel):
     name: str
     ticker: str
-    description: str
     industry: str
     website: str
     headquaters: str
-    employees: int
+    employees: str
     ceo: str
-    
+
+
 load_dotenv()
 app = FastAPI()
 
@@ -82,16 +84,18 @@ async def analyze(query: str):
 
         # Run the agent
         toolset = AsyncToolSet()
-        toolset.add(AsyncFunctionTool({organization_data.async_fetch_organization_data_using_sqlite_query}))
+        toolset.add(AsyncFunctionTool(
+            {organization_data.async_fetch_organization_data_using_sqlite_query}))
 
         # Add the Bing grounding tool
-        bing_connection = await project_client.connections.get(connection_name=BING_CONNECTION_NAME)
-        bing_grounding = BingGroundingTool(connection_id=bing_connection.id)
-        print(f"Using Bing connection: {bing_connection.id}")
-        toolset.add(bing_grounding)
-        
+        # bing_connection = await project_client.connections.get(connection_name=BING_CONNECTION_NAME)
+        # bing_grounding = BingGroundingTool(connection_id=bing_connection.id)
+        # print(f"Using Bing connection: {bing_connection.id}")
+        # toolset.add(bing_grounding)
+
         run = await project_client.agents.create_and_process_run(
-            thread_id=thread.id, agent_id=agent.id, toolset=toolset, response_format=CompanyAnalytics
+            thread_id=thread.id, agent_id=agent.id, toolset=toolset, response_format={
+                "type": "json_schema", "json_schema": {"name": "CompanyAnalytics", "schema": CompanyAnalytics.model_json_schema()}}
         )
 
         if run.status == "failed":
@@ -99,7 +103,9 @@ async def analyze(query: str):
 
         # Get messages from the thread
         messages = await project_client.agents.list_messages(thread_id=thread.id)
-        return {"response": messages.data[0].content[0].text.value}
+        response = CompanyAnalytics.model_validate_json(
+            messages.data[0].content[0].text.value)
+        return response
 
     except Exception as e:
         return {"error": str(e)}

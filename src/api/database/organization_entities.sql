@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS organizations;
 CREATE TABLE IF NOT EXISTS organizations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -10,7 +11,7 @@ CREATE TABLE IF NOT EXISTS organizations (
 );
 
 -- Fortune 500 Companies Insert Statements
-INSERT INTO organizations (name, ticker, industry, headquarters, website, ceo, employees) VALUES
+INSERT INTO organizations (name, ticker, industry, headquarters, website, employees, ceo) VALUES
 ('Walmart', 'WMT', 'General Merchandisers', 'Bentonville, Arkansas', 'https://walmart.com', '2,100,000', 'Douglas Mcmillon'),
 ('Amazon', 'AMZN', 'Internet Services and Retailing', 'Seattle, Washington', 'https://amazon.com', '1,525,000', 'Andrew R. Jassy'),
 ('Apple', 'AAPL', 'Computers, Office Equipment', 'Cupertino, California', 'https://apple.com', '161,000', 'Timothy D. Cook'),
