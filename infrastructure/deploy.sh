@@ -2,9 +2,7 @@
 
 set -euo pipefail
 
-# Log file for all output
-LOG_FILE="/tmp/deploy_azure.log"
-exec > >(tee -a "$LOG_FILE") 2>&1
+
 
 # Check for required tools
 for cmd in az jq sed tee; do
@@ -13,6 +11,10 @@ for cmd in az jq sed tee; do
     exit 2
   fi
 done
+
+# Log file for all output
+LOG_FILE="/tmp/deploy_azure.log"
+exec > >(tee -a "$LOG_FILE") 2>&1
 
 # Define resource group parameters
 RG_NAME="rg-agent-analyst"
