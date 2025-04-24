@@ -10,9 +10,20 @@ from azure.ai.projects.models import (
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from pydantic import BaseModel
 from utilities.utilities import Utilities
 from organization_data import OrganizationData
 
+class CompanyAnalytics(BaseModel):
+    name: str
+    ticker: str
+    description: str
+    industry: str
+    website: str
+    headquaters: str
+    employees: int
+    ceo: str
+    
 load_dotenv()
 app = FastAPI()
 
@@ -80,7 +91,7 @@ async def analyze(query: str):
         toolset.add(bing_grounding)
         
         run = await project_client.agents.create_and_process_run(
-            thread_id=thread.id, agent_id=agent.id, toolset=toolset
+            thread_id=thread.id, agent_id=agent.id, toolset=toolset, response_format=CompanyAnalytics
         )
 
         if run.status == "failed":
