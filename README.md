@@ -56,9 +56,9 @@ The provisioned resources include:
 
 # Run locally
 
-1. Confirm the `src/api/.env` has been created succesfully and the `PROJECT_CONNECTION_STRING` is populated referencing the newly created resources. 
+1. Confirm the `src/api/.env` has been created successfully and the `PROJECT_CONNECTION_STRING` is populated referencing the newly created resources.
 
-1. Create the sqlite database with organization data based on `src/api/database/organizaton_entities.sql` by running the `Generate database` task using the Command Palette (Ctrl+Shift+P) or by running the following commands in the terminal: 
+1. Create the sqlite database with organization data based on `src/api/database/organization_entities.sql` by using the Command Palette (Ctrl+Shift+P on Windows, ⌘P on Mac), selecting `Tasks: Run Build Task`, and then the `Generate database` task or by running the following commands in the terminal:
 
    ```bash
    # navigate to the database directory
@@ -67,11 +67,11 @@ The provisioned resources include:
    # generate database
    python generate_sql.py
 
-   # confirm the database has been created (33 records)
+   # confirm the database has been created (473 records)
    sqlite3 /workspaces/ai-agent/src/api/database/organizations.db "SELECT COUNT(*) FROM organizations"
    ```
 
-1. Run the Analyst Agent API by running the `Run API` task using the Command Palette (Ctrl+Shift+P) or by running the following commands in the terminal:
+1. Run the Analyst Agent API by using the Command Palette (Ctrl+Shift+P on Windows, ⌘P on Mac), selecting `Tasks: Run Build Task`, and then the `Run API` task or by running the following commands in the terminal:
 
    ```bash
    # navigate back to the api directory

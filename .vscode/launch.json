@@ -14,7 +14,7 @@
                 "--reload"
             ],
             "jinja": true,
-            "cwd": "./src/api"
+            "cwd": "${workspaceFolder}/src/api"
         }
     ]
 }
