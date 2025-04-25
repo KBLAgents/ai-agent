@@ -12,9 +12,6 @@ The purpose of the AI Agent is to summarize and analyze organization data given 
 ## Infrastructure
 
 ```bash
-# login to Azure
-az login
-
 # navigate to the infrastructure directory
 cd infrastructure
 
@@ -27,6 +24,9 @@ cp sample.env .env
 ```
 
 The `infrastructure/deploy.sh` script automates the deployment of Azure resources and performs several post-deployment tasks, ensuring all necessary resources and settings are prepared for the project. 
+
+1. **Azure Authentication**
+   - Checks `az login` status and prompts for login if needed.
 
 1. **Resource Group Creation**:
    - Creates a resource group named `rg-agent-analyst` in the `westus` region.
