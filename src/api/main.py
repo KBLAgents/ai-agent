@@ -9,8 +9,20 @@ from azure.ai.projects.models import (
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from pydantic import BaseModel
 from utilities.utilities import Utilities
 from organization_data import OrganizationData
+
+
+class CompanyAnalytics(BaseModel):
+    name: str
+    ticker: str
+    industry: str
+    website: str
+    headquaters: str
+    employees: str
+    ceo: str
+
 
 load_dotenv()
 app = FastAPI()
@@ -61,7 +73,7 @@ async def analyze(query: str):
         instructions = prepare_instructions(query, database_schema)
 
         # Create a message
-        message = await project_client.agents.create_message(
+        await project_client.agents.create_message(
             thread_id=thread.id,
             role="user",
             content=instructions,
@@ -69,9 +81,12 @@ async def analyze(query: str):
 
         # Run the agent
         toolset = AsyncToolSet()
-        toolset.add(AsyncFunctionTool({organization_data.async_fetch_organization_data_using_sqlite_query}))
+        toolset.add(AsyncFunctionTool(
+            {organization_data.async_fetch_organization_data_using_sqlite_query}))
+
         run = await project_client.agents.create_and_process_run(
-            thread_id=thread.id, agent_id=agent.id, toolset=toolset
+            thread_id=thread.id, agent_id=agent.id, toolset=toolset, response_format={
+                "type": "json_schema", "json_schema": {"name": "CompanyAnalytics", "schema": CompanyAnalytics.model_json_schema()}}
         )
 
         if run.status == "failed":
@@ -79,7 +94,9 @@ async def analyze(query: str):
 
         # Get messages from the thread
         messages = await project_client.agents.list_messages(thread_id=thread.id)
-        return {"response": messages.data[0].content[0].text.value}
+        response = CompanyAnalytics.model_validate_json(
+            messages.data[0].content[0].text.value)
+        return response
 
     except Exception as e:
         return {"error": str(e)}
