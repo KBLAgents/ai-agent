@@ -18,6 +18,10 @@ az login
 # navigate to the infrastructure directory
 cd infrastructure
 
+# copy and rename sample.env to .env
+cp sample.env .env
+# you can update these variable names if you want.
+
 # run the deployment script
 . ./deploy.sh
 ```
@@ -54,7 +58,7 @@ The provisioned resources include:
 ![azure-resources](./docs/assets/azure-resources.png)
 
 
-# Run locally
+## Run locally
 
 1. Confirm the `src/api/.env` has been created successfully and the `PROJECT_CONNECTION_STRING` is populated referencing the newly created resources.
 
@@ -83,4 +87,22 @@ The provisioned resources include:
 
    The API will load in which will load on http://127.0.0.1:8000/docs.
    
-   Try out the GET /analyze endpoint by setting the query to a company name (e.g., Omni Labs)
+   Try out the GET /analyze endpoint by setting the query to any Fotune 500 company name or stock ticker symbol (e.g., Microsoft or MSFT).
+
+   Alternatively, you can use Curl.
+   ```bash
+   curl -X 'GET' 'http://127.0.0.1:8000/analyze?query=MSFT' -H 'accept: application/json'
+   ```
+
+__Response__
+   ```json
+   {
+   "name": "Microsoft",
+   "ticker": "MSFT",
+   "industry": "Computer Software",
+   "website": "https://microsoft.com",
+   "headquaters": "Redmond, Washington",
+   "employees": "221,000",
+   "ceo": "Satya Nadella"
+   }
+   ```

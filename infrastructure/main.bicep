@@ -112,6 +112,7 @@ module aiProject 'modules-basic-keys/basic-ai-project-keys.bicep' = {
   }
 }
 
+
 // Outputs
 output subscriptionId string = subscription().subscriptionId
 output resourceGroupName string = resourceGroup().name
