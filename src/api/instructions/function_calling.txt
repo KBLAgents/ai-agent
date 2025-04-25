@@ -24,20 +24,8 @@ Instruction
 Analyze {organization} organization, return the following:
    - the organization's official name
    - stock ticker symbol
-   - organization description
-   - detailed analysis of competitors and unique value
-   - Return the output in a json format with the schema below without any explanation or additional text:
-
-"""
-{
-   "name": str,
-   "ticker": str
-   "description": str,
-   "industry": str,
-   "website": str,
-   "headquarters": str,
-   "employees": str,
-   "ceo": str,
-   "competitors_and_value_analysis": str
-}
-"""
+   - industry
+   - website
+   - headquarters
+   - employees
+   - ceo

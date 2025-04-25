@@ -2,16 +2,19 @@
 
 echo "Deploying the Azure resources..."
 
-# Define resource group parameters
-RG_NAME="rg-agent-analyst"
-RG_LOCATION="westus"
-MODEL_NAME="gpt-4o"
-AI_HUB_NAME="agent-wksp"
-AI_PROJECT_NAME="agent-analyst"
-AI_PROJECT_FRIENDLY_NAME="Agent-Service-analyst"
-STORAGE_NAME="agentservicestorage"
-AI_SERVICES_NAME="agent-analyst"
-MODEL_CAPACITY=200
+# Load environment variables from .env file
+# set -a
+source ".env"
+# set +a
+
+# Verify required variables are loaded
+required_vars=(RG_NAME RG_LOCATION MODEL_NAME AI_HUB_NAME AI_PROJECT_NAME AI_PROJECT_FRIENDLY_NAME STORAGE_NAME AI_SERVICES_NAME MODEL_CAPACITY)
+for var in "${required_vars[@]}"; do
+  if [ -z "${!var}" ]; then
+    echo "Error: $var is not set in .env file."
+    exit 1
+  fi
+done
 
 # Create the resource group
 az group create --name "$RG_NAME" --location "$RG_LOCATION"
