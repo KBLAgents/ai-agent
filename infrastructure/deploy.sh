@@ -3,9 +3,7 @@
 set -euo pipefail
 
 # Load environment variables from .env file
-# set -a
 source ".env"
-# set +a
 
 # Check for required tools
 for cmd in az jq sed tee; do
@@ -29,7 +27,6 @@ for var in "${required_vars[@]}"; do
   # Print progress
   echo "Using $var='${!var}'"
 done
-
 error_exit() {
   echo "Error on line $1: $2" >&2
   # Clean up output.json if it exists
@@ -40,45 +37,6 @@ error_exit() {
 trap 'error_exit $LINENO "$BASH_COMMAND"' ERR
 
 set -euo pipefail
-
-
-
-# Check for required tools
-for cmd in az jq sed tee; do
-  if ! command -v "$cmd" >/dev/null 2>&1; then
-    echo "Required command '$cmd' not found. Please install it before running this script." >&2
-    exit 2
-  fi
-done
-
-# Log file for all output
-LOG_FILE="/tmp/deploy_azure.log"
-exec > >(tee -a "$LOG_FILE") 2>&1
-
-# Load environment variables from .env file
-# set -a
-source ".env"
-# set +a
-
-# Validate required environment variables and parameters
-required_vars=(RG_NAME RG_LOCATION MODEL_NAME AI_HUB_NAME AI_PROJECT_NAME AI_PROJECT_FRIENDLY_NAME STORAGE_NAME AI_SERVICES_NAME MODEL_CAPACITY)
-for var in "${required_vars[@]}"; do
-  if [ -z "${!var:-}" ]; then
-    echo "Required variable $var is not set or empty." >&2
-    exit 3
-  fi
-  # Print progress
-  echo "Using $var='${!var}'"
-done
-
-error_exit() {
-  echo "Error on line $1: $2" >&2
-  # Clean up output.json if it exists
-  echo "Cleaning up output.json..."
-  [ -f output.json ] && rm -f output.json
-  exit 1
-}
-trap 'error_exit $LINENO "$BASH_COMMAND"' ERR
 
 echo "Deploying the Azure resources..."
 
