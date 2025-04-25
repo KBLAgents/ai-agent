@@ -13,40 +13,43 @@ Below is the project structure for the **AI-Agent**, with descriptions of key fo
 | **Path**                       | **Description**                                                               |
 |--------------------------------|-------------------------------------------------------------------------------|
 | `.devcontainer/`               | DevContainer configuration for remote development                             |
-| ├── `devcontainer.json`         | Main configuration for setting up the container environment                   |
-| ├── `Dockerfile`                | Custom Dockerfile with specific dependencies                                  |
+| ├── `devcontainer.json`        | Main configuration for setting up the container environment                   |
+| ├── `Dockerfile`               | Custom Dockerfile with specific dependencies                                  |
 | `.vscode/`                     | Visual Studio Code workspace settings                                         |
-| ├── `settings.json`             | Workspace-specific settings for easy configuration                           |
+| ├── `launch.json`              | Debug/Launch configuration                                                    |
+| ├── `settings.json`            | Workspace-specific settings for easy configuration                            |
+| ├── `tasks.json`               | Tasks for automated workflows                                                 |
 | `data/`                        | Placeholder directory for additional datasets                                 |
-| `docs/`                        | Documentation assets                                                         |
-| ├── `assets/`                  | Image resources and additional docs                                          |
-| ├── `.gitkeep`                 | Ensures folder existence in Git                                              |
-| `infrastructure/`              | Azure infrastructure deployment scripts                                      |
+| `docs/`                        | Documentation assets                                                          |
+| ├── `assets/`                  | Image resources and additional docs                                           |
+| ├── `spike/`                   | Docs used in spike experiments                                                |
+| `infrastructure/`              | Azure infrastructure deployment scripts                                       |
 | ├── `modules-basic-keys/`      | Bicep module definitions for resources                                        |
-| │ ├── `basic-ai-hub-keys.bicep` | AI Hub configuration                                                        |
-| │ ├── `basic-ai-project-keys.bicep` | AI Project configuration                                               |
-| │ ├── `basic-dependent-resources-keys.bicep` | Dependencies for the AI environment                              |
-| ├── `deploy.sh`                | Bash script for deploying resources on Azure                                 |
-| ├── `main.bicep`               | Main deployment file for resource orchestration                              |
-| ├── `output.json`              | JSON output from a successful deployment                                     |
-| `src/api/`                     | Source code directory                                                        |
-| ├── `__pycache__/`             | Auto-generated cache files for Python                                        |
-| ├── `database/`                | SQLite database scripts and files                                            |
-| │ ├── `generate_sql.py`        | Script to generate and populate the database                                 |
-| │ ├── `organization_entities.sql` | SQL schema for entity definitions                                         |
-| │ ├── `organizations.db`       | SQLite database file                                                        |
-| ├── `instructions/`            | Instructions and notes regarding API functionality                          |
-| │ ├── `function_calling.txt`   | Notes and ideas for functionality                                            |
-| ├── `utilities/`               | Utility functions for the API                                                |
-| │ ├── `utilities.py`           | Helper functions for encoding, formatting, etc.                              |
-| ├── `.env`                     | Environment configuration file                                               |
-| ├── `main.py`                  | Entry point for FastAPI application                                          |
-| ├── `organization_data.py`     | Core logic for processing organization data                                  |
-| ├── `README.md`                | Documentation for the API                                                    |
-| `.gitignore`                   | Git ignore file                                                             |
-| `LICENSE`                      | License file                                                                |
-| `README.md`                    | Documentation for the project                                                |
-| `requirements.txt`             | Python dependency file                                                      |
+| │ ├── `basic-ai-hub-keys.bicep` | AI Hub configuration                                                         |
+| │ ├── `basic-ai-project-keys.bicep` | AI Project configuration                                                 |
+| │ ├── `basic-dependent-resources-keys.bicep` | Dependencies for the AI environment                             |
+| ├── `deploy.sh`                | Bash script for deploying resources on Azure                                  |
+| ├── `main.bicep`               | Main deployment file for resource orchestration                               |
+| ├── `output.json`              | JSON output from a successful deployment                                      |
+| ├── `sample.env`               | Sample environment variables file                                             |
+| `src/api/`                     | Source code directory                                                         |
+| ├── `__pycache__/`             | Auto-generated cache files for Python                                         |
+| ├── `database/`                | SQLite database scripts and files                                             |
+| │ ├── `generate_sql.py`        | Script to generate and populate the database                                  |
+| │ ├── `organization_entities.sql` | SQL schema for entity definitions                                          |
+| ├── `instructions/`            | Instructions and notes regarding API functionality                            |
+| │ ├── `function_calling.txt`   | Notes and ideas for functionality                                             |
+| ├── `utilities/`               | Utility functions for the API                                                 |
+| │ ├── `utilities.py`           | Helper functions for encoding, formatting, etc.                               |
+| ├── `.env`                     | Environment configuration file                                                |
+| ├── `main.py`                  | Entry point for FastAPI application                                           |
+| ├── `organization_data.py`     | Core logic for processing organization data                                   |
+| ├── `terminal_colors.py`       | Terminal color settings for output formatting                                 |
+| ├── `README.md`                | Documentation for the API                                                     |
+| `.gitignore`                   | Git ignore file                                                               |
+| `LICENSE`                      | License file                                                                  |
+| `README.md`                    | Documentation for the project                                                 |
+| `requirements.txt`             | Python dependency file                                                        |
 
 
 ---
@@ -61,13 +64,16 @@ Below is the project structure for the **AI-Agent**, with descriptions of key fo
 ---
 
 ## Requirements
-Before starting, ensure you have the following installed:
+Before starting, ensure you have:
+- **Docker** (Required for DevContainer)
+    - Install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+- **Azure subscription** with permissions to create resources and assign roles.
+
+The following are installed in the DevContainer:
 - **Python 3.11+**
     - Download from [python.org](https://www.python.org/downloads/).
 - **Azure CLI**
     - Follow instructions on [Azure CLI Documentation](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli).
-- **Docker** (Optional for DevContainers)
-    - Install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 - **SQLite**
     - Download SQLite tools from [sqlite.org](https://www.sqlite.org/download.html) for manual database management.
 
@@ -80,149 +86,141 @@ Before starting, ensure you have the following installed:
 git clone <repo-url>
 cd ai-agent
 ```
-### 2. Install Dependencies
-1. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
-```
-2. Install Python dependencies from `requirements.txt`:
-```bash
-pip install -r requirements.txt
-```
-### 3. Configure the Infrastructure
+
+### 3. Provision the Infrastructure
 #### Step 1: Login to Azure
-- Connect to your Azure account:
+
 ```bash
-az login
-```
-- Verify that you are logged in to the correct subscription:
-```bash
+# navigate to the infrastructure directory
+az login --tenant <your-tenant-id>
+
+# Verify that you are logged in to the correct subscription
 az account show
 ```
 #### Step 2: Deploy the Azure resources
-1. Navigate to the `infrastructure` directory:
+
 ```bash
+# navigate to the infrastructure directory
 cd infrastructure
+
+# copy and rename sample.env to .env
+cp sample.env .env
+# you can update these variable names if you want.
+
+# run the deployment script
+. ./deploy.sh
 ```
-2. Run the deployment script:
-```bash
-./deploy.sh
-```
 
-- The script will:
-   - Create a resource group `rg-agent-analyst`.
-   - Deploy Azure resources defined in `main.bicep`.
-   - Output configuration details to `output.json` .
-   - Generate a `.env` file for the FastAPI backend in `src/api` with variables like `PROJECT_CONNECTION_STRING`.
-### 4. Generating `PROJECT_CONNECTION_STRING`
-The `PROJECT_CONNECTION_STRING` is required for the FastAPI application and should reference the resources deployed on Azure.
+The `infrastructure/deploy.sh` script automates the deployment of Azure resources and performs several post-deployment tasks, ensuring all necessary resources and settings are prepared for the project. 
 
-#### Steps to Generate:
-1. Navigate to the Azure portal to locate the following values:
-    - **AI Hub Name (`aiHubName`)**: Found in the resource group under Azure AI Foundry.
-    - **AI Project Name (`aiProjectName`)**: Found in the Azure AI Hub as part of the deployed resources.
-    - **Model Name (`modelName`)**: The name of the deployed AI model (e.g., `gpt-4o`).
-    - **Endpoint (`discovery_url`)**: This can be found in the Azure portal by selecting the deployed AI workspace. Example URL: `https://<resource-name>.openai.azure.com/`.
+1. **Azure Authentication**
+   - Checks `az login` status and prompts for login if needed.
 
-2. Combine these values into the following format:
-    ```plaintext
-    <HostName>;<SubscriptionId>;<ResourceGroupName>;<AIProjectName>
-    ```
-    Example:
-    ```plaintext
-    https://agent-analyst.openai.azure.com;78fe4846-8b13-459a-8797-898cfb7d0c88;rg-agent-analyst;ai-agent-project
-    ```
+1. **Resource Group Creation**:
+   - Creates a resource group named `rg-agent-analyst` in the `westus` region.
 
-3. Save the string in the `.env` file located in `src/api`:
-    ```plaintext
-    PROJECT_CONNECTION_STRING="<connection_string>"
-    MODEL_DEPLOYMENT_NAME="gpt-4o"
-    ```
----
+1. **Azure Resource Deployment**:
+   - Deploys resources defined in the `main.bicep` file using the Azure CLI. Parameters like `aiHubName`, `aiProjectName`, `modelName`, and others are passed to customize the deployment.
+   - The deployment output is saved to a file named `output.json`.
 
-### 5. Initialize the SQLite Database
+1. **Post-Deployment Configuration**:
+   - Extracts deployment outputs (e.g., `aiProjectName`, `resourceGroupName`, `subscriptionId`) from `output.json`.
+   - Retrieves the `discovery_url` of the deployed Azure Machine Learning workspace and processes it to generate a `PROJECT_CONNECTION_STRING`.
 
-1. Navigate to the `src/api/database` directory:
+1. **Environment File Setup**:
+   - Writes the `PROJECT_CONNECTION_STRING` and other configuration values to a `.env` file for a Python project.
+
+1. **Role Assignment**:
+   - Assigns the "Data Scientist" role to the current user for the created resource group, enabling necessary permissions.
+
+1. **Cleanup**:
+   - Deletes the `output.json` file after processing.
+
+The provisioned resources include:
+
+- [Azure AI Services](https://learn.microsoft.com/en-us/azure/ai-services/what-are-ai-services) (includes Azure OpenAI, Azure AI Agent Service, Azure AI Search and more)
+- [Azure Storage Account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview)
+- [Azure AI hub](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/create-azure-ai-resource?tabs=portal)
+- [Azure AI project](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/create-projects?tabs=ai-studio)
+
+![azure-resources](./docs/assets/azure-resources.png)
+
+
+## Run locally
+
+1. Confirm the `src/api/.env` has been created successfully and the `PROJECT_CONNECTION_STRING` is populated referencing the newly created resources.
+
+1. Create the sqlite database with organization data based on `src/api/database/organization_entities.sql` by using the Command Palette (Ctrl+Shift+P on Windows, ⌘P on Mac), selecting `Tasks: Run Build Task`, and then the `Generate database` task or by running the following commands in the terminal:
+
+   ```bash
+   # navigate to the database directory
+   cd ../src/api/database
+
+   # generate database
+   python generate_sql.py
+
+   # confirm the database has been created (473 records)
+   sqlite3 /workspaces/ai-agent/src/api/database/organizations.db "SELECT COUNT(*) FROM organizations"
+   ```
+
+1. Run the Analyst Agent API by using the Command Palette (Ctrl+Shift+P on Windows, ⌘P on Mac), selecting `Tasks: Run Build Task`, and then the `Run API` task or by running the following commands in the terminal:
+
     ```bash
-    cd src/api/database
-    ```
+    # navigate back to the api directory
+    cd ..
 
-2. Populate the database by running the provided script:
-    ```bash
-    python generate_sql.py
-    ```
-
-3. Verify the database contents:
-    ```bash
-    sqlite3 organizations.db "SELECT COUNT(*) FROM organizations;"
-    ```
----
-
-### 6. Run the FastAPI Application Locally
-
-1. Navigate to the `src/api` directory:
-    ```bash
-    cd src/api
-    ```
-
-2. Start the FastAPI development server:
-    ```bash
+    # run the API 
     uvicorn main:app --reload
     ```
 
-3. Open the Swagger UI in your browser:
-    ```plaintext
-    http://127.0.0.1:8000/docs
+    The API will load on http://127.0.0.1:8000/docs.
+
+    Try out the GET /analyze endpoint by setting the query to any Fotune 500 company name or stock ticker symbol (e.g., Microsoft or MSFT).
+
+    Alternatively, you can use curl:
+    ```bash
+    curl -X 'GET' 'http://127.0.0.1:8000/analyze?query=MSFT' -H 'accept: application/json'
     ```
 
-4. Test the `GET /analyze` endpoint:
-    - Use Swagger's "Try It Out" feature.
-    - Provide a query string for a company name like `Omni Labs`.
-    - Verify the JSON response, for example:
-      ```json
-      {
-        "organization": "Omni Labs",
-        "summary": "Omni Labs is a leader in AI solutions.",
-        "analysis": "Focused on AI-driven robotics."
-      }
-      ```
+    The response will be a JSON object containing the organization data, such as:
+    ```json
+    {
+    "name": "Microsoft",
+    "ticker": "MSFT",
+    "industry": "Computer Software",
+    "website": "https://microsoft.com",
+    "headquaters": "Redmond, Washington",
+    "employees": "221,000",
+    "ceo": "Satya Nadella"
+    }
+    ```
 ---
 
 ## Troubleshooting
 
-### Common Issues
-
-1. **ModuleNotFoundError (e.g., azure.ai.projects)**:
-    - Ensure Azure SDK modules are installed and updated:
-      ```bash
-      pip install azure-ai
-      pip install --upgrade azure
-      ```
-
-2. **SQLite Database Error (`unable to open database file`)**:
+1. SQLite Database Error (`unable to open database file`):
     - Use the absolute path for `organizations.db`, for example:
       ```bash
-      sqlite3 'C:/Users/username/ai-agent/src/api/database/organizations.db' "SELECT * FROM organizations;"
+      sqlite3 '/workspaces/ai-agent/src/api/database/organizations.db' "SELECT * FROM organizations;"
       ```
 
-3. **Azure Role Assignment Failed**:
+1. Azure Role Assignment Failed during deployment:
+    - Ensure you have the necessary permissions to assign roles in Azure.
     - Manually assign the "Data Scientist" role:
       ```bash
       az role assignment create --role "Data Scientist" --assignee "<objectId>" --scope "/subscriptions/<subId>/resourceGroups/rg-agent-analyst"
       ```
-
-4. **FastAPI Not Starting (`main.py` not found)**:
-    - Ensure you're running from the correct directory:
-      ```bash
-      uvicorn main:app --reload
-      ```
 ---
+
 ## Contributing
+
 1. Fork the repository and create a feature branch.
 2. Include appropriate tests for all new features or changes.
 3. Submit a pull request after testing thoroughly.
+
 ---
+
 ## License
 This project is licensed under the **MIT License**.
 
+---

@@ -131,3 +131,9 @@ cython_debug/
 
 # VS Code settings
 .vscode/
+
+# database files
+*.db
+
+# infrastructure output
+infrastructure/output.json
