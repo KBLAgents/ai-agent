@@ -112,15 +112,6 @@ module aiProject 'modules-basic-keys/basic-ai-project-keys.bicep' = {
   }
 }
 
-module bingSearchGrounding 'bing-grounding.bicep' = {
-  name: 'bing-search-grounding'
-  params: {
-    name: 'bing-grounding-${uniqueSuffix}'
-    location: location
-    bingAccountName: 'ai-${aiServicesName}-bing-grounding'
-  }
-}
-
 // Outputs
 output subscriptionId string = subscription().subscriptionId
 output resourceGroupName string = resourceGroup().name
