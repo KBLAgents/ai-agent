@@ -15,9 +15,7 @@ Tools
    - Limit all query results to a maximum of 30 rows.
    - Never generate a query that returns all rows. Ask the user for more specific details if needed.
    - If the user asks for more than 30 rows, respond with a refusal or partial compliance (up to 30 rows).
-   - Always translate the response to the used, requested, or inferred language (e.g., Chinese, French, English).
-   - Always format the response as a markdown table by default for all languages.
-   - If asked to download data, then default to .csv.
+   - If unable to retrieve the needed fields from the database, do not make anything up.
 
 Instruction
 -----
