@@ -116,4 +116,3 @@ module aiProject 'modules-basic-keys/basic-ai-project-keys.bicep' = {
 output subscriptionId string = subscription().subscriptionId
 output resourceGroupName string = resourceGroup().name
 output aiProjectName string = 'ai-${projectName}-${uniqueSuffix}'
-output bingGroundingName string = 'bing-grounding-${uniqueSuffix}'

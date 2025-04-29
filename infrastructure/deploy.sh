@@ -40,19 +40,6 @@ set -euo pipefail
 
 echo "Deploying the Azure resources..."
 
-# Load environment variables from .env file
-# set -a
-source ".env"
-# set +a
-
-# Verify required variables are loaded
-required_vars=(RG_NAME RG_LOCATION MODEL_NAME AI_HUB_NAME AI_PROJECT_NAME AI_PROJECT_FRIENDLY_NAME STORAGE_NAME AI_SERVICES_NAME MODEL_CAPACITY)
-for var in "${required_vars[@]}"; do
-  if [ -z "${!var}" ]; then
-    echo "Error: $var is not set in .env file."
-    exit 1
-  fi
-done
 # Check Azure CLI login status
 if ! az account show > /dev/null 2>&1; then
   echo "You are not logged in to Azure CLI. Please log in."
